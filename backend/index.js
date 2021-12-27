@@ -19,15 +19,34 @@ app.use(bodyParser.json())
 const db = require('./config/keys').mongoURI
 
 // initializes our database using the credentials
-mongoose.set('useFindAndModify', false)
-mongoose
-  .connect(db, () => {}, {useNewUrlParser: true})
-  .then(() => console.log('Mongo Database connected'))
-  .catch(err => console.log(err))
+// mongoose
+//   .connect(db)
+//   .then(() => console.log('Mongo Database connected'))
+//   .catch(err => console.log(err))
+
+  // mongoose.connect(db, (err, client) => {
+  //   console.log('Mongo Database connected')
+  // })
+
+
+  mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch(err => {
+    console.log("Cannot connect to the database!", err);
+    process.exit();
+  });
+
 
 // creates a route where we can interact with our API
 // If you wish to make additional routes, you should import and add them here just like we did with books.
 app.use('/api/books', books)
+
 
 // sets the port number depending if we are in production or development
 const port = process.env.PORT || 5000
